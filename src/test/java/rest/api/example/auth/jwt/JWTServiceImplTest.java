@@ -1,10 +1,7 @@
 package rest.api.example.auth.jwt;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import rest.api.example.auth.exceptions.InvalidJwtTokenException;
 
 import java.util.HashMap;
@@ -15,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class JWTServiceImplTest {
 
-    private JWTService jwtService = new JWTServiceImpl();
+    private final JWTService jwtService = new JWTServiceImpl();
 
 
     @Test
