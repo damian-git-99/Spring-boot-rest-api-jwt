@@ -13,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import rest.api.example.auth.jwt.JWTService;
 import rest.api.example.security.filters.AuthenticationFilter;
 
 @EnableGlobalMethodSecurity(securedEnabled = true)
@@ -21,10 +22,12 @@ import rest.api.example.security.filters.AuthenticationFilter;
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
+    private final JWTService jwtService;
 
     @Autowired
-    public SpringSecurityConfig(UserDetailsService userDetailsService) {
+    public SpringSecurityConfig(UserDetailsService userDetailsService, JWTService jwtService) {
         this.userDetailsService = userDetailsService;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -43,7 +46,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
 
         // Filters
-        http.addFilter(new AuthenticationFilter(this.authenticationManager()));
+        http.addFilter(new AuthenticationFilter(this.authenticationManager(), jwtService));
     }
 
     @Bean
