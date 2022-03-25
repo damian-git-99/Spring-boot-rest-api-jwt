@@ -7,7 +7,6 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 
 @Entity @Data
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"id", "user_id"})})
 @NoArgsConstructor
 public class Role implements GrantedAuthority {
 

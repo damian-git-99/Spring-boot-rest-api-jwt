@@ -8,6 +8,7 @@ import rest.api.example.user.role.Role;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,10 +27,10 @@ public class User {
     private String email;
     @NotEmpty
     private String password;
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "roles_id"})})
     @JsonIgnore
-    private List<Role> roles;
+    private List<Role> roles = new ArrayList<>();
 
     public User(String username, String email, String password) {
         this.username = username;
