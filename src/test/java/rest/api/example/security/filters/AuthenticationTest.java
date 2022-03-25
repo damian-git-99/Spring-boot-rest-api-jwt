@@ -3,6 +3,7 @@ package rest.api.example.security.filters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,7 +36,7 @@ class AuthenticationTest {
     @MockBean
     private UserDao userDao;
 
-    @Autowired
+    @MockBean
     private PasswordEncoder passwordEncoder;
 
     ObjectMapper mapper = new ObjectMapper();
@@ -44,11 +45,12 @@ class AuthenticationTest {
     @DisplayName("it returns 200 when email and password are correct")
     void successfulAuthentication() throws Exception {
         var roles = List.of(new Role("USER"));
-        User user = new User("damian", "damian@gmail.com", passwordEncoder.encode("1234"));
+        User user = new User("damian", "damian@gmail.com", "1234");
         user.setRoles(roles);
         User user1 = new User("", "damian@gmail.com", "1234");
 
         given(userDao.findUserByEmail("damian@gmail.com")).willReturn(Optional.of(user));
+        given(passwordEncoder.matches("1234", "1234")).willReturn(true);
 
         mvc.perform(post("/api/1.0/auth")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -62,11 +64,12 @@ class AuthenticationTest {
     @DisplayName("it should failed when password is not correct")
     void unsuccessfulAuthentication() throws Exception {
         var roles = List.of(new Role("USER"));
-        User user = new User("damian", "damian@gmail.com", passwordEncoder.encode("1234"));
+        User user = new User("damian", "damian@gmail.com", "1234");
         user.setRoles(roles);
         User user1 = new User("", "damian@gmail.com", "123456");
 
         given(userDao.findUserByEmail("damian@gmail.com")).willReturn(Optional.of(user));
+        given(passwordEncoder.matches("1234", "1234")).willReturn(true);
 
         mvc.perform(post("/api/1.0/auth")
                         .contentType(MediaType.APPLICATION_JSON)
