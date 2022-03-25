@@ -4,4 +4,5 @@ import rest.api.example.user.entities.User;
 
 public interface UserService {
     User findUserByEmail(String email);
+    void signIn(User user);
 }
