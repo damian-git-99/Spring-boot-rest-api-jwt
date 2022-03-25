@@ -1,4 +1,4 @@
-package rest.api.example.user.entities;
+package rest.api.example.user.role;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

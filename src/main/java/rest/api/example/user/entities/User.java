@@ -3,6 +3,7 @@ package rest.api.example.user.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import rest.api.example.user.role.Role;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -34,5 +35,9 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public boolean addRole(Role role) {
+        return roles.add(role);
     }
 }

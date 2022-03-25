@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import rest.api.example.user.daos.UserDao;
-import rest.api.example.user.entities.Role;
+import rest.api.example.user.role.Role;
 import rest.api.example.user.entities.User;
 
 
