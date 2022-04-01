@@ -38,16 +38,21 @@ public class JWTServiceImpl implements JWTService {
     @Override
     public boolean validateToken(String authorizationHeader) {
         try {
-            Jwts.parserBuilder()
-                    .setSigningKey(SECRET_KEY)
-                    .build()
-                    .parseClaimsJws(this.resolveToken(authorizationHeader))
-                    .getBody();
+            getClaims(authorizationHeader);
             return true;
         } catch (JwtException e) {
             // Token validation failed
             throw new InvalidJwtTokenException("Expired or invalid JWT token");
         }
+    }
+
+    @Override
+    public Claims getClaims(String authorizationHeader) {
+        return Jwts.parserBuilder()
+                .setSigningKey(SECRET_KEY)
+                .build()
+                .parseClaimsJws(this.resolveToken(authorizationHeader))
+                .getBody();
     }
 
     // remove the Bearer from the token
