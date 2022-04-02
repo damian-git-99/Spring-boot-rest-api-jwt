@@ -11,8 +11,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import rest.api.example.auth.jwt.JWTService;
 import rest.api.example.security.filters.AuthenticationFilter;
+import rest.api.example.security.filters.JWTAuthorizationFilter;
 
 @EnableGlobalMethodSecurity(securedEnabled = true)
 @Configuration
@@ -47,6 +49,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Filters
         http.addFilter(new AuthenticationFilter(this.authenticationManager(), jwtService));
+        http.addFilterBefore(new JWTAuthorizationFilter(jwtService), UsernamePasswordAuthenticationFilter.class);
     }
 
 }
