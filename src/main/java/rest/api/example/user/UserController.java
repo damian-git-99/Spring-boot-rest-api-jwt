@@ -18,8 +18,8 @@ import java.util.List;
 @RequestMapping("/api/1.0/users")
 public class UserController {
 
-    private AbstractConverter<User, UserDTO> abstractConverter = new UserDTOConverter();
-    private UserService userService;
+    private final AbstractConverter<User, UserDTO> abstractConverter = new UserDTOConverter();
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
