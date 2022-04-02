@@ -15,6 +15,8 @@ import rest.api.example.user.exceptions.UserNotFoundException;
 import rest.api.example.user.role.Role;
 import rest.api.example.user.role.RoleDao;
 
+import java.util.List;
+
 
 @Service
 @Transactional
@@ -62,6 +64,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
         userDao.save(user);
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        return userDao.findAll();
     }
 
 }
