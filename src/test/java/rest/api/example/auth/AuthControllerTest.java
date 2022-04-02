@@ -3,17 +3,14 @@ package rest.api.example.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-import rest.api.example.auth.jwt.JWTService;
+import rest.api.example.shared.BaseControllerTest;
 import rest.api.example.user.entities.User;
-import rest.api.example.user.services.UserService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,22 +22,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest
-class AuthControllerTest {
+class AuthControllerTest extends BaseControllerTest {
 
     @Autowired
     private MockMvc mvc;
 
     @MockBean
     UserDetailsService userDetailsService;
-
-    @MockBean
-    JWTService jwtService;
-
-    @MockBean
-    UserService userService;
-
-    @MockBean
-    PasswordEncoder passwordEncoder;
 
     private final ObjectMapper mapper = new ObjectMapper();
 
