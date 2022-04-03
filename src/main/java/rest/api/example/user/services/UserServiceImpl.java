@@ -16,6 +16,7 @@ import rest.api.example.user.role.Role;
 import rest.api.example.user.role.RoleDao;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -69,6 +70,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public List<User> findAllUsers() {
         return userDao.findAll();
+    }
+
+    @Override
+    public Optional<User> findUserById(Long userId) {
+        return userDao.findById(userId);
     }
 
 }

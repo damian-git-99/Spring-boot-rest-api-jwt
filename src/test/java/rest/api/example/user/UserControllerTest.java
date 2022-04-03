@@ -12,9 +12,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import rest.api.example.shared.BaseControllerTest;
+import rest.api.example.user.entities.User;
 
+import java.util.Optional;
+
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
@@ -41,10 +47,35 @@ class UserControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("should get all users")
+    @DisplayName("should return 200 ok")
     void shouldGetAllUsers() throws Exception {
         mvc.perform(get("/api/1.0/users").with(principalUser))
                 .andExpect(status().isOk());
+
+    }
+
+    @Test
+    @DisplayName("should return 200 ok when user exists")
+    void shouldGetUserById() throws Exception {
+        User user = new User("damian", "damian@gmail.com", "123456");
+        given(userService.findUserById(1L)).willReturn(Optional.of(user));
+
+        mvc.perform(get("/api/1.0/users/1").with(principalUser))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("damian"))
+                .andExpect(jsonPath("$.email").value("damian@gmail.com"));
+
+        then(userService).should().findUserById(1L);
+    }
+
+    @Test
+    @DisplayName("should return 404 when user does not exist")
+    void shouldNotGetUserById() throws Exception {
+        User user = null;
+        given(userService.findUserById(1L)).willReturn(Optional.ofNullable(user));
+
+        mvc.perform(get("/api/1.0/users/1").with(principalUser))
+                .andExpect(status().isNotFound());
 
     }
 

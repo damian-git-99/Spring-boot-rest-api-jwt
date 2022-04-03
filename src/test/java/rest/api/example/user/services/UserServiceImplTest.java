@@ -140,5 +140,31 @@ class UserServiceImplTest {
         then(userDao).should(never()).save(user);
     }
 
+    @Test
+    @DisplayName("Should return all users")
+    void shouldReturnAllUsers() {
+        User user = new User("damian", "damian@gmail.com", "123456");
+        User user2 = new User("jose", "jose@gmail.com", "123456");
+        User user3 = new User("carlos", "carlos@gmail.com", "123456");
 
+        given(userDao.findAll()).willReturn(List.of(user, user2, user3));
+
+        List<User> users = userService.findAllUsers();
+
+        assertThat(users.size()).isEqualTo(3);
+        assertThat(users).contains(user, user2, user3);
+    }
+
+    @Test
+    @DisplayName("should return user by id")
+    void shouldReturnUserById() {
+        User userData = new User("damian", "damian@gmail.com", "123456");
+        userData.setId(1L);
+
+        given(userService.findUserById(1L)).willReturn(Optional.of(userData));
+
+        Optional<User> user = userService.findUserById(1L);
+
+        assertThat(user).isPresent();
+    }
 }
