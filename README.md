@@ -28,4 +28,5 @@ SignIn: POST /api/1.0/users | { username, email, password }
 LogIn: POST /api/1.0/auth   | { email, password }
 FindAllUsers: GET /api/1.0/users
 FindUserById: GET /api/1.0/users/{id}
+DeleteUser: DELETE /api/1.0/users/{id}
 ```

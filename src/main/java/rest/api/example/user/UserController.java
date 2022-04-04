@@ -38,4 +38,10 @@ public class UserController {
         return userService
                 .findUserById(id).orElseThrow(() -> new UserNotFoundException("user ot found"));
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser(@PathVariable(name = "id") Long id) {
+        userService.deleteUserById(id);
+    }
 }

@@ -16,9 +16,9 @@ import rest.api.example.user.entities.User;
 
 import java.util.Optional;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -79,5 +79,15 @@ class UserControllerTest extends BaseControllerTest {
 
     }
 
+    @Test
+    @DisplayName("should return 200 when the user is successfully deleted")
+    void shouldDeleteUserById() throws Exception {
+
+        mvc.perform(delete("/api/1.0/users/1").with(principalUser))
+                .andExpect(status().isOk());
+
+        then(userService).should().deleteUserById(1L);
+
+    }
 
 }

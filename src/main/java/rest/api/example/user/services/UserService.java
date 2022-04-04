@@ -10,4 +10,5 @@ public interface UserService {
     void signIn(User user);
     List<User> findAllUsers();
     Optional<User> findUserById(Long userId);
+    void deleteUserById(Long id);
 }
