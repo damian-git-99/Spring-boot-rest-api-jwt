@@ -1,6 +1,7 @@
 package rest.api.example.user.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -39,7 +40,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = userDao.findUserByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.getRoles());
+        return new org.springframework.security.core.userdetails.User(user.getEmail(),
+                user.getPassword(),
+                user.getRoles());
     }
 
     @Override
@@ -80,6 +83,28 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void deleteUserById(Long id) {
         userDao.deleteById(id);
+    }
+
+    @Override
+    public User updateUser(Long id, User newUser) {
+        User userToBeUpdated = findUserById(id)
+                .orElseThrow(() -> new UserNotFoundException("User Not found"));
+        userToBeUpdated.setUsername(newUser.getUsername());
+        String email = newUser.getEmail();
+
+        if (!email.equals(userToBeUpdated.getEmail())) {
+            if (userDao.findUserByEmail(email).isPresent()) {
+                throw new EmailAlreadyExistsException("the email already exists");
+            }
+            userToBeUpdated.setEmail(email);
+        }
+
+        String password = newUser.getPassword() != null
+                ? passwordEncoder.encode(newUser.getPassword())
+                : userToBeUpdated.getPassword();
+
+        userToBeUpdated.setPassword(password);
+        return userDao.save(userToBeUpdated);
     }
 
 }

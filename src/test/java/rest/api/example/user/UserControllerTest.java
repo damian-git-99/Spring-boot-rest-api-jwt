@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,8 +19,7 @@ import java.util.Optional;
 
 import static org.mockito.BDDMockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -71,8 +71,7 @@ class UserControllerTest extends BaseControllerTest {
     @Test
     @DisplayName("should return 404 when user does not exist")
     void shouldNotGetUserById() throws Exception {
-        User user = null;
-        given(userService.findUserById(1L)).willReturn(Optional.ofNullable(user));
+        given(userService.findUserById(1L)).willReturn(Optional.empty());
 
         mvc.perform(get("/api/1.0/users/1").with(principalUser))
                 .andExpect(status().isNotFound());
@@ -88,6 +87,24 @@ class UserControllerTest extends BaseControllerTest {
 
         then(userService).should().deleteUserById(1L);
 
+    }
+
+    @Test
+    @DisplayName("should return 200 when the user is successfully updated")
+    void shouldUpdateUser() throws Exception {
+        User userRequest = new User("username updated", "damian222@gmail.com", "2233232");
+
+        given(userService.updateUser(1L, userRequest)).willReturn(userRequest);
+
+        mvc.perform(put("/api/1.0/users/1").with(principalUser)
+                        .content(mapper.writeValueAsString(userRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("username updated"))
+                .andExpect(jsonPath("$.email").value("damian222@gmail.com"));
+
+
+        then(userService).should().updateUser(1L, userRequest);
     }
 
 }
