@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.then;
@@ -166,5 +168,52 @@ class UserServiceImplTest {
         Optional<User> user = userService.findUserById(1L);
 
         assertThat(user).isPresent();
+    }
+
+    @Test
+    @DisplayName("should delete user By Id")
+    void shouldDeleteUserById() {
+        userService.deleteUserById(1L);
+        ArgumentCaptor<Long> captor = ArgumentCaptor.forClass(Long.class);
+        then(userDao).should().deleteById(captor.capture());
+        assertThat(captor.getValue()).isEqualTo(1L);
+    }
+
+    @Test
+    @DisplayName("should update user")
+    void shouldUpdateUser() {
+        User userInDb = new User("damian","damian@gmail.com","12345");
+        userInDb.setId(1L);
+        User updatedUser = new User("damian_update","damian22@gmail.com","12345");
+
+        given(userService.findUserById(1L)).willReturn(Optional.of(userInDb));
+        given(userDao.save(userInDb)).willReturn(userInDb);
+        given(userDao.findUserByEmail("damian22@gmail.com")).willReturn(Optional.empty());
+
+        User user = userService.updateUser(1L, updatedUser);
+
+        assertThat(user.getUsername()).isEqualTo("damian_update");
+        assertThat(user.getEmail()).isEqualTo("damian22@gmail.com");
+
+        then(userDao).should().save(any(User.class));
+    }
+
+    @Test
+    @DisplayName("Should not update user when email already exists")
+    void shouldNotUpdate() {
+        User userInDb = new User("damian","damian@gmail.com","12345");
+        userInDb.setId(1L);
+        User updatedUser = new User("damian_update","damian22@gmail.com","12345");
+
+        given(userService.findUserById(1L)).willReturn(Optional.of(userInDb));
+        given(userDao.findUserByEmail("damian22@gmail.com")).willReturn(Optional.of(new User()));
+
+        Exception exception = assertThrows(EmailAlreadyExistsException.class, () -> {
+            userService.updateUser(1L, updatedUser);
+        });
+
+        assertThat(exception.getClass()).isEqualTo(EmailAlreadyExistsException.class);
+        assertThat(exception.getMessage()).isEqualTo("the email already exists");
+        then(userDao).should(never()).save(any(User.class));
     }
 }
