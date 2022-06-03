@@ -24,7 +24,7 @@ This is an example for using [JWT](https://jwt.io/) (JSON Web Token)  and [Mysql
 ### Users API
 Use postman to test the api
 ```
-SignIn: POST /api/1.0/users | { username, email, password }
+SignUp: POST /api/1.0/users | { username, email, password }
 LogIn: POST /api/1.0/auth   | { email, password }
 FindAllUsers: GET /api/1.0/users
 FindUserById: GET /api/1.0/users/{id}
