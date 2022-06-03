@@ -3,6 +3,7 @@ package rest.api.example.security.filters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,8 +33,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request
             , HttpServletResponse response
             , FilterChain chain) throws ServletException, IOException {
-
-        if (request.getServletPath().equals("/api/1.0/auth")) chain.doFilter(request, response);
+        if (request.getServletPath().equals("/api/1.0/auth/")) chain.doFilter(request, response);
 
         String authorizationHeader = request.getHeader("Authorization");
 
@@ -41,7 +41,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
             return;
         }
-        System.err.println(authorizationHeader);
+
         try {
             if (jwtService.validateToken(authorizationHeader)) {
                 Claims claims = jwtService.getClaims(authorizationHeader);

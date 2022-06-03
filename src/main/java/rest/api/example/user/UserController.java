@@ -2,7 +2,6 @@ package rest.api.example.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import rest.api.example.shared.AbstractConverter;
 import rest.api.example.user.dtos.UserDTO;
@@ -11,9 +10,9 @@ import rest.api.example.user.entities.User;
 import rest.api.example.user.exceptions.UserNotFoundException;
 import rest.api.example.user.services.UserService;
 
+import java.security.Principal;
 import java.util.List;
 
-@Secured("ROLE_USER")
 @RestController
 @RequestMapping("/api/1.0/users")
 public class UserController {
