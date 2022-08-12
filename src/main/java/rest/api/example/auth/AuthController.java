@@ -27,11 +27,11 @@ public class AuthController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> signIn(@RequestBody @Valid User user
+    public ResponseEntity<?> signUp(@RequestBody @Valid User user
             , BindingResult result) {
 
         if (result.hasErrors()) return errors(result);
-        userService.signIn(user);
+        userService.signUp(user);
         return ResponseEntity.ok("User Created");
     }
 

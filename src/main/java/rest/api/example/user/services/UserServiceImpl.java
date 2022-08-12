@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void signIn(User user) {
+    public void signUp(User user) {
 
         if (userDao.findUserByEmail(user.getEmail()).isPresent()) {
             throw new EmailAlreadyExistsException("the email already exists");

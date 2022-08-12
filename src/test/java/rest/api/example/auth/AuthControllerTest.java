@@ -34,18 +34,18 @@ class AuthControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("it returns 200 ok when a valid user is sent")
-    void shouldSignIn() throws Exception {
+    void shouldSignUp() throws Exception {
         User user = new User("damian", "damian@gmail.com", "123456");
         mvc.perform(post("/api/1.0/users").contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(user)))
                 .andExpect(status().isOk());
 
-        then(userService).should().signIn(any(User.class));
+        then(userService).should().signUp(any(User.class));
     }
 
     @Test
     @DisplayName("it returns 400 when username, password and email are invalid")
-    void shouldNotSignIn() throws Exception {
+    void shouldNotSignUp() throws Exception {
         User user = new User("", "damian", "");
         Map<String, Object> errors = new HashMap<>();
         errors.put("email", "must be a well-formed email address");
@@ -57,7 +57,7 @@ class AuthControllerTest extends BaseControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json(mapper.writeValueAsString(errors)));
 
-        then(userService).should(never()).signIn(any(User.class));
+        then(userService).should(never()).signUp(any(User.class));
 
     }
 

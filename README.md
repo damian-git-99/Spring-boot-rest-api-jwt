@@ -19,7 +19,7 @@ This is an example for using [JWT](https://jwt.io/) (JSON Web Token)  and [Mysql
 ```
 
 ### Users Use Case Diagram
-![USE_CASE](https://i.ibb.co/1m4ntzZ/usecase.png)
+![USE_CASE](https://i.ibb.co/YNLSpW4/usecase.png)
 
 ### Users API
 Use postman to test the api

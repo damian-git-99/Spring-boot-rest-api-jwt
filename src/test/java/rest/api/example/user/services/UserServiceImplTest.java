@@ -1,7 +1,6 @@
 package rest.api.example.user.services;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -114,7 +113,7 @@ class UserServiceImplTest {
             return user;
         });
 
-        userService.signIn(user);
+        userService.signUp(user);
 
         assertThat(user.getId()).isNotNull();
         assertThat(user.getPassword()).isEqualTo("hashedPassword");
@@ -134,7 +133,7 @@ class UserServiceImplTest {
         given(userDao.findUserByEmail("damian@gmail.com")).willReturn(Optional.ofNullable(userInDB));
 
         Exception exception = assertThrows(EmailAlreadyExistsException.class, () -> {
-            userService.signIn(user);
+            userService.signUp(user);
         });
 
         assertThat(exception.getClass()).isEqualTo(EmailAlreadyExistsException.class);
