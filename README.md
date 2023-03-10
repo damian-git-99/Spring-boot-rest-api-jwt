@@ -3,14 +3,20 @@
 ##
 This is an example for using [JWT](https://jwt.io/) (JSON Web Token)  and [Mysql](https://www.mysql.com/) with Spring Security and Spring Boot.
 
-## Requirements
+## Run project With Docker
+- Install Docker
+- Run `docker compose up`
+
+
+## Run Project Manually
+
+### Requirements
 ```
 * Java 11
 * Maven 3
 * Mysql 8.0.26
 ```
 
-## Usage
 ```
 1- Install Mysql 
 2- CREATE DATABASE tasks_app;
