@@ -1,7 +1,7 @@
 # Example of a rest api using JWT Spring Security
 
 ##
-This is an example for using [JWT](https://jwt.io/) (JSON Web Token)  and [Mysql](https://www.mysql.com/) with Spring Security and Spring Boot.
+This is an example for using [JWT](https://jwt.io/) (JSON Web Token)  and [Mysql](https://www.mysql.com/) with Spring Security and Spring Boot 2.7.5.
 
 ## Run project With Docker
 - Install Docker
