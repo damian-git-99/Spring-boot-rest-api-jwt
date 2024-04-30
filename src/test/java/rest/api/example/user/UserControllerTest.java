@@ -4,14 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import rest.api.example.security.SpringSecurityConfig;
-import rest.api.example.shared.BaseControllerTest;
 import rest.api.example.user.entities.User;
+import rest.api.example.user.services.UserService;
 
 import java.util.Optional;
 
@@ -21,8 +20,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
-@Import(SpringSecurityConfig.class)
-class UserControllerTest extends BaseControllerTest {
+@AutoConfigureMockMvc(addFilters = false)
+class UserControllerTest {
+
+    @MockBean
+    protected UserService userService;
 
     @Autowired
     private MockMvc mvc;
@@ -31,7 +33,6 @@ class UserControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("should return 200 ok")
-    @WithMockUser(roles = "USER", username = "damian@gmail.com")
     void shouldGetAllUsers() throws Exception {
         mvc.perform(get("/api/1.0/users"))
                 .andExpect(status().isOk());
@@ -39,7 +40,6 @@ class UserControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("should return 200 ok when user exists")
-    @WithMockUser(roles = "USER", username = "damian@gmail.com")
     void shouldGetUserById() throws Exception {
         User user = new User("damian", "damian@gmail.com", "123456");
         given(userService.findUserById(1L)).willReturn(Optional.of(user));
@@ -53,7 +53,6 @@ class UserControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("should return 404 when user does not exist")
-    @WithMockUser(roles = "USER", username = "damian@gmail.com")
     void shouldNotGetUserById() throws Exception {
         given(userService.findUserById(1L)).willReturn(Optional.empty());
 
@@ -63,7 +62,6 @@ class UserControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("should return 200 when the user is successfully deleted")
-    @WithMockUser(roles = "USER", username = "damian@gmail.com")
     void shouldDeleteUserById() throws Exception {
 
         mvc.perform(delete("/api/1.0/users/1"))
@@ -75,7 +73,6 @@ class UserControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("should return 200 when the user is successfully updated")
-    @WithMockUser(roles = "USER", username = "damian@gmail.com")
     void shouldUpdateUser() throws Exception {
         User userRequest = new User("username updated", "damian222@gmail.com", "2233232");
 
