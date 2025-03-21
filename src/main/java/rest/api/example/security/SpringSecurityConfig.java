@@ -12,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
 import rest.api.example.auth.jwt.JWTService;
 import rest.api.example.security.filters.AuthenticationFilter;
 import rest.api.example.security.filters.JWTAuthorizationFilter;
@@ -43,6 +44,7 @@ public class SpringSecurityConfig {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/1.0/auth").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/1.0/users").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/1.0/users").authenticated()
                 .antMatchers("/api/**").hasRole("USER")
                 .anyRequest().permitAll();
         http.apply(httpConfigurer);
